@@ -10,15 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id      String    @id
+  Product Product[]
+}
+
 model Product {
-  id        String @id @default(uuid())
-  managerId String
+  id         String @id @default(uuid())
+  managerId  String
+  categoryId String
 
-  nm       String
-  price    Decimal
-  category String
+  nm    String
+  price Decimal
 
-  manager Manager @relation(fields: [managerId], references: [id])
+  manager  Manager  @relation(fields: [managerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 }
 
 model Manager {
