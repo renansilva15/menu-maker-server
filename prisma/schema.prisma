@@ -20,7 +20,7 @@ model Product {
   managerId  String
   categoryId String
 
-  nm    String
+  name  String
   price Decimal
 
   manager  Manager  @relation(fields: [managerId], references: [id])
@@ -28,13 +28,16 @@ model Product {
 }
 
 model Manager {
-  id String @id @default(uuid())
+  id  String @id @default(uuid())
+  cpf String @unique
 
-  nm       String
+  name     String
+  email    String @unique
   password String
 
   storeName String
   zap       String
+
   firstTime Boolean @default(true)
 
   Product Product[]
@@ -42,9 +45,11 @@ model Manager {
 }
 
 model User {
-  nm       String @id
+  id       String @id @default(uuid())
+  cpf      String @unique
+  name     String
+  email    String @unique
   password String
-  cpf      String
 
   manager Manager[]
 }
@@ -53,7 +58,7 @@ model User {
 //   id  String @id @default(uuid())
 //   managerId String
 
-//   nm  String
+//   name  String
 //   cpf String @unique
 
 //   manager   Manager @relation(fields: [managerId], references: [id])

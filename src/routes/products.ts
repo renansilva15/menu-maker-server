@@ -3,13 +3,20 @@ import { z } from 'zod'
 import { prisma } from '../lib/prisma'
 
 export async function productsRoutes(app: FastifyInstance) {
-  app.get('/products', async () => {
+  app.addHook('preHandler', async (request) => {
+    await request.jwtVerify()
+  })
+
+  app.get('/products', async (request) => {
     const products = await prisma.product.findMany({
+      where: {
+        managerId: request.user.sub,
+      },
       orderBy: [
         {
           categoryId: 'asc',
         },
-        { nm: 'asc' },
+        { name: 'asc' },
       ],
     })
 
@@ -35,17 +42,17 @@ export async function productsRoutes(app: FastifyInstance) {
   app.post('/products', async (request) => {
     const bodySchema = z.object({
       categoryId: z.string(),
-      nm: z.string(),
+      name: z.string(),
       price: z.number(),
     })
 
-    const { categoryId, nm, price } = bodySchema.parse(request.body)
+    const { categoryId, name, price } = bodySchema.parse(request.body)
 
     const product = await prisma.product.create({
       data: {
-        managerId: '6aa91385-bb1a-4987-be18-5f7b90bacef9',
+        managerId: request.user.sub,
         categoryId,
-        nm,
+        name,
         price,
       },
     })
@@ -62,11 +69,11 @@ export async function productsRoutes(app: FastifyInstance) {
 
     const bodySchema = z.object({
       categoryId: z.string(),
-      nm: z.string(),
+      name: z.string(),
       price: z.number(),
     })
 
-    const { categoryId, nm, price } = bodySchema.parse(request.body)
+    const { categoryId, name, price } = bodySchema.parse(request.body)
 
     const memory = await prisma.product.update({
       where: {
@@ -75,7 +82,7 @@ export async function productsRoutes(app: FastifyInstance) {
 
       data: {
         categoryId,
-        nm,
+        name,
         price,
       },
     })

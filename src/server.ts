@@ -1,9 +1,14 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
 import { productsRoutes } from './routes/products'
-import { usersRoutes } from './routes/users'
+import { loginRoute } from './routes/login'
 
 const app = fastify()
+
+app.register(jwt, {
+  secret: 'Garagaragaragaragaragaranhão...',
+})
 
 app.register(cors, {
   // origin: ['http://localhost:3000', ''], Endereços do frontend
@@ -11,7 +16,7 @@ app.register(cors, {
 })
 
 app.register(productsRoutes)
-app.register(usersRoutes)
+app.register(loginRoute)
 
 app
   .listen({
