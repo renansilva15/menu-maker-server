@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import { productsRoutes } from './routes/products'
 import { loginRoute } from './routes/login'
+import { categoriesRoutes } from './routes/categories'
 
 const app = fastify()
 
@@ -17,6 +18,7 @@ app.register(cors, {
 
 app.register(productsRoutes)
 app.register(loginRoute)
+app.register(categoriesRoutes)
 
 app
   .listen({
