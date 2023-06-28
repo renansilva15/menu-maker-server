@@ -20,8 +20,6 @@ export async function categoriesRoutes(app: FastifyInstance) {
       categoriesResponse.push({ value: category.id, label: category.id })
     }
 
-    console.log(categoriesResponse)
-
     return categoriesResponse
   })
 }
