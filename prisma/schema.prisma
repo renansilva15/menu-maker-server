@@ -17,13 +17,11 @@ model Category {
 
 model Product {
   id         String @id @default(uuid())
-  managerId  String
   categoryId String
 
   name  String
   price Decimal
 
-  manager  Manager  @relation(fields: [managerId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
 }
 
@@ -35,13 +33,11 @@ model Manager {
   email    String @unique
   password String
 
-  storeName String
-  zap       String
+  storeName      String
+  numberOfTables Int    @default(1)
+  zap            String
 
   firstTime Boolean @default(true)
-
-  Product Product[]
-  User    User[]
 }
 
 model User {
@@ -50,16 +46,4 @@ model User {
   name     String
   email    String @unique
   password String
-
-  manager Manager[]
 }
-
-// model User {
-//   id  String @id @default(uuid())
-//   managerId String
-
-//   name  String
-//   cpf String @unique
-
-//   manager   Manager @relation(fields: [managerId], references: [id])
-// }

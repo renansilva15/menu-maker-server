@@ -9,9 +9,6 @@ export async function productsRoutes(app: FastifyInstance) {
 
   app.get('/products', async (request) => {
     const products = await prisma.product.findMany({
-      where: {
-        managerId: request.user.sub,
-      },
       orderBy: [
         {
           categoryId: 'asc',
@@ -50,7 +47,6 @@ export async function productsRoutes(app: FastifyInstance) {
 
     const product = await prisma.product.create({
       data: {
-        managerId: request.user.sub,
         categoryId,
         name,
         price,

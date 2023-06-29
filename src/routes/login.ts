@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { prisma } from '../lib/prisma'
 
 export async function loginRoute(app: FastifyInstance) {
-  app.post('/login', async (request) => {
+  app.post('/login', async (request, reply) => {
     const bodySchema = z.object({
       cpf: z.string(),
       password: z.string(),
@@ -13,22 +13,31 @@ export async function loginRoute(app: FastifyInstance) {
     const { cpf, password, isManager } = bodySchema.parse(request.body)
 
     let user
-    if (isManager) {
-      user = await prisma.manager.findUniqueOrThrow({
-        where: {
-          cpf,
-        },
-      })
-    } else {
-      user = await prisma.user.findUniqueOrThrow({
-        where: {
-          cpf,
-        },
-      })
+
+    try {
+      if (isManager) {
+        user = await prisma.manager.findUniqueOrThrow({
+          where: {
+            cpf,
+          },
+        })
+      } else {
+        user = await prisma.user.findUniqueOrThrow({
+          where: {
+            cpf,
+          },
+        })
+      }
+    } catch (err) {
+      if (String(err).includes("Can't reach database")) {
+        return reply.code(500).send()
+      } else {
+        return reply.code(404).send()
+      }
     }
 
     if (password !== user.password) {
-      return
+      return reply.code(401).send()
     }
 
     const token = app.jwt.sign(
@@ -41,10 +50,8 @@ export async function loginRoute(app: FastifyInstance) {
       },
     )
 
-    console.log(cpf, password, isManager)
-
-    return {
+    return reply.code(200).send({
       token,
-    }
+    })
   })
 }
