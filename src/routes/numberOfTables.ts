@@ -8,7 +8,15 @@ export async function numberOfTablesRoutes(app: FastifyInstance) {
 
   app.get('/tables', async () => {
     const manager = await prisma.manager.findMany()
+    const numberOfTablesResponse = []
 
-    return manager[0].numberOfTables
+    for (let table = 0; table < manager[0].numberOfTables; table++) {
+      numberOfTablesResponse.push({
+        value: `Mesa ${table + 1}`,
+        label: `Mesa ${table + 1}`,
+      })
+    }
+
+    return numberOfTablesResponse
   })
 }
