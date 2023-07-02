@@ -30,13 +30,16 @@ export async function loginRoute(app: FastifyInstance) {
       }
     } catch (err) {
       if (String(err).includes("Can't reach database")) {
+        // console.log('Erro ao contatar o servidor, verifique sua conexão')
         return reply.code(500).send()
       } else {
+        // console.log('Usuário não encontrado')
         return reply.code(404).send()
       }
     }
 
     if (password !== user.password) {
+      // console.log('Senha incorreta')
       return reply.code(401).send()
     }
 
