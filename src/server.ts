@@ -5,6 +5,7 @@ import { productsRoutes } from './routes/products'
 import { loginRoute } from './routes/login'
 import { categoriesRoutes } from './routes/categories'
 import { numberOfTablesRoutes } from './routes/numberOfTables'
+import { registerRoute } from './routes/register'
 
 const app = fastify()
 
@@ -21,6 +22,7 @@ app.register(productsRoutes)
 app.register(loginRoute)
 app.register(categoriesRoutes)
 app.register(numberOfTablesRoutes)
+app.register(registerRoute)
 
 app
   .listen({
