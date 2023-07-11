@@ -15,31 +15,41 @@ export async function registerRoute(app: FastifyInstance) {
 
     console.log(name, cpf, email, password)
 
-    try {
-      await prisma.user.findUniqueOrThrow({
+    const isCpfRegister =
+      (await prisma.user.findUnique({
         where: {
           cpf,
         },
-      })
-
-      await prisma.manager.findUniqueOrThrow({
+      })) ||
+      (await prisma.manager.findUnique({
         where: {
           cpf,
         },
-      })
+      }))
 
+    if (isCpfRegister) {
       return reply.status(401).send('CPF já cadastrado')
-    } catch (err) {
-      const user = await prisma.user.create({
-        data: {
-          name,
-          cpf,
-          email,
-          password,
-        },
-      })
-
-      return reply.status(200).send(user)
     }
+
+    const isEmailRegister = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    })
+
+    if (isEmailRegister) {
+      return reply.status(402).send('email já cadastrado')
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        cpf,
+        email,
+        password,
+      },
+    })
+
+    return reply.status(200).send(user)
   })
 }
