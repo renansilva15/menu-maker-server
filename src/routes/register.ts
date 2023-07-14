@@ -20,7 +20,7 @@ export async function registerRoute(app: FastifyInstance) {
         where: {
           cpf,
         },
-      })) ||
+      })) ??
       (await prisma.manager.findUnique({
         where: {
           cpf,
@@ -38,10 +38,10 @@ export async function registerRoute(app: FastifyInstance) {
     })
 
     if (isEmailRegister) {
-      return reply.status(402).send('email já cadastrado')
+      return reply.status(401).send('email já cadastrado')
     }
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         cpf,
@@ -50,6 +50,6 @@ export async function registerRoute(app: FastifyInstance) {
       },
     })
 
-    return reply.status(200).send(user)
+    return reply.status(200).send('Cadastro realizado com sucesso')
   })
 }

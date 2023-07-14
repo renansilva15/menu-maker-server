@@ -10,12 +10,12 @@ import { registerRoute } from './routes/register'
 const app = fastify()
 
 app.register(jwt, {
-  secret: 'Garagaragaragaragaragaranhão...',
+  secret: 'Garagaragaragaragaragaranhão...', // Tem que mandar para o .env
 })
 
 app.register(cors, {
   // origin: ['http://localhost:3000', ''], Endereços do frontend
-  origin: true, //
+  origin: true,
 })
 
 app.register(productsRoutes)
