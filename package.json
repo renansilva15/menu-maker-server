@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
-    "lint": "eslint src --ext .ts --fix"
+    "lint": "eslint src --ext .ts --fix",
+    "build": "tsup src",
+    "start": "node dist/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Renan Gabriel Gonçalves Silva",
   "license": "ISC",
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
@@ -23,6 +28,7 @@
     "@fastify/cors": "^8.3.0",
     "@fastify/jwt": "^7.0.0",
     "@prisma/client": "^4.14.1",
+    "tsup": "^7.1.0",
     "fastify": "^4.17.0",
     "zod": "^3.21.4"
   }
